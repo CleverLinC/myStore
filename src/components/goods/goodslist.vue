@@ -145,7 +145,7 @@ export default {
         method: "get",
         url: url
       }).then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.goodsList = response.data.message;
       });
     },

@@ -323,9 +323,12 @@ export default {
       addToShopCar(){
           this.imgshow = true;
 
+          const goods = {
+              goodsId:this.$route.params.goodsId,
+              count:this.num1
+          };
+          this.$store.commit("addGoods",goods)
       }
-
-
     },
 
 

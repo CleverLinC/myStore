@@ -11,23 +11,25 @@
                         <a target="_blank" href="#"></a>
                     </div>
                     <div id="menu" class="right-box">
-                        <span style="display: none;">
-                            <a href="" class="">登录</a>
+                        
+                        <span v-show="!isShow">
+                            <router-link to="/site/login" class="">登录</router-link>
                             <strong>|</strong>
                             <a href="" class="">注册</a>
                             <strong>|</strong>
                         </span>
-                        <span>
+                     
+                        <span v-show="isShow">
                             <a href="" class="">会员中心</a>
                             <strong>|</strong>
                             <a>退出</a>
                             <strong>|</strong>
                         </span>
-                        <a href="" class="">
+                        <router-link to="/site/shopCar" class="">
                             <i class="iconfont icon-cart"></i>购物车(
                             <span id="shoppingCartCount">
-                                <span>4</span>
-                            </span>)</a>
+                                <span>{{$store.getters.getTotalGoodsCount}}</span>
+                            </span>)</router-link>
                     </div>
                 </div>
             </div>
@@ -124,8 +126,21 @@
 
 
 <script>
-
+  import bus from "./common/common.js"
     export default{
+        data(){
+            return {
+                isShow:false,
+
+            }
+        },
+        created(){
+              bus.$on('loginSuccess',mes=>{
+                  this.isShow = mes
+              });
+              this.checkIsLogin()
+
+        },
         mounted(){
             
               $("#menu2 li a").wrapInner('<span class="out"></span>');
@@ -142,7 +157,21 @@
                 $(".over", this).stop().animate({ 'top': '-48px' }, 300); // move up - hide
             });
         
+        },
+        methods:{
+        //    获取登录状态
+            checkIsLogin(){
+                const url = 'site/account/islogin';
+                 this.$ajax.get(url).then(response=>{
+                    if(response.data.code == 'nologin'){
+                        this.isShow = false
+                    }else{
+                        this.isShow = true
+                    }
+                })
+            }
         }
+        
     }
 
 </script>
